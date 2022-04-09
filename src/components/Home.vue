@@ -6,11 +6,6 @@
         {{ productName }}
       </MenuItem>
       <div style="float: right">
-        <!-- <Submenu
-          name="2"
-          @click.native="isShowAbout = true"
-          on-select="isShowAbout = true"
-        > -->
         <Dropdown class="dropdown" placement="bottom-end">
           <Button type="primary">
             <Icon type="md-more" size="20" />
