@@ -246,7 +246,7 @@
       </div>
       <div class="footer">
         Powered By <a href="http://blog.teahot.top/" target="_blank">maypu</a> - 
-        <a href="https://gitee.com/maypu/AirFile" target="_blank"><Icon type="logo-github"/>Gitee</a>
+        <a href="https://github.com/maypu/AirFile" target="_blank"><Icon type="logo-github"/>Github</a>
       </div>
     </div>
     <Modal
