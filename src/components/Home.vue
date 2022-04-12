@@ -1,7 +1,7 @@
 <template>
   <div>
     <Menu mode="horizontal" theme="primary" active-name="1">
-      <MenuItem name="1">
+      <MenuItem name="1" to='/'>
         <Icon type="ios-paper" />
         {{ productName }}
       </MenuItem>
