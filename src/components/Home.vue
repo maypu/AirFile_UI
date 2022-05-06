@@ -339,6 +339,7 @@ export default {
   computed: {
     nightTime() {
       if (this.utils.CompareTime(new Date(),"23:00:00") > 0 || this.utils.CompareTime(new Date(),"07:00:00") < 0) {
+        document.body.style.backgroundColor = "#22303f";
         return true;
       }
       return false;
@@ -661,7 +662,7 @@ export default {
 }
 
 .containDark {
-  background-color: #22303f;
+  /* background-color: #22303f; */
   color: #ffffff;
 }
 
