@@ -1,7 +1,7 @@
 <template>
   <div>
     <Menu mode="horizontal" theme="primary" active-name="1">
-      <MenuItem name="1" to='/'>
+      <MenuItem name="1" to="/">
         <Icon type="ios-paper" />
         {{ productName }}
       </MenuItem>
@@ -27,7 +27,11 @@
         </Dropdown>
       </div>
     </Menu>
-    <div class="contain" :class="{containDark: nightTime}" :style="{ height: containHeight }">
+    <div
+      class="contain"
+      :class="{ containDark: nightTime }"
+      :style="{ height: containHeight }"
+    >
       <div class="logo-area" :style="{ marginTop: topHeight }">
         <img src="/static/images/logo.png" alt="logo.png" />
         <p class="title">{{ productName }}</p>
@@ -50,7 +54,7 @@
                 >
               </Upload>
               <div class="more-upload" v-if="showMoreUpload">
-                <div class="use-tip" :class="{useTipDark: nightTime}">
+                <div class="use-tip" :class="{ useTipDark: nightTime }">
                   <p>- 支持拖拽文件到本页面任意位置进行上传</p>
                   <p>- 支持Ctrl+V粘贴文件进行上传</p>
                 </div>
@@ -149,7 +153,7 @@
                   <label for="">密码</label>
                 </Col>
                 <Col span="19" class="row-input">
-                    <Input v-model="password" placeholder="可留空"></Input>
+                  <Input v-model="password" placeholder="可留空"></Input>
                 </Col>
               </Row>
               <Row>
@@ -157,37 +161,41 @@
                   <label for="">可下载次数</label>
                 </Col>
                 <Col span="7" class="row-input">
-                    <InputNumber
-                      :min="1"
-                      :max="frequencyMax"
-                      v-model="frequency"
-                      @on-change="frequencyChange"
-                      style="width: 100%"
-                    ></InputNumber>
+                  <InputNumber
+                    :min="1"
+                    :max="frequencyMax"
+                    v-model="frequency"
+                    @on-change="frequencyChange"
+                    style="width: 100%"
+                  ></InputNumber>
                 </Col>
                 <Col span="5" class="row">
                   <label for="">保留小时数</label>
                 </Col>
                 <Col span="7" class="row-input">
-                    <Poptip
-                      trigger="hover"
-                      :content="limitTipContent"
-                      :disabled="disableLimitTip"
-                    >
-                      <InputNumber
-                        :min="1"
-                        :max="limithoursMax"
-                        v-model="limithours"
-                        @on-change="limithoursChange"
-                        style="width: 100%"
-                      ></InputNumber>
-                    </Poptip>
-                  </Col>
+                  <Poptip
+                    trigger="hover"
+                    :content="limitTipContent"
+                    :disabled="disableLimitTip"
+                  >
+                    <InputNumber
+                      :min="1"
+                      :max="limithoursMax"
+                      v-model="limithours"
+                      @on-change="limithoursChange"
+                      style="width: 100%"
+                    ></InputNumber>
+                  </Poptip>
+                </Col>
               </Row>
             </Form>
-            <Button type="primary" @click="upload" :loading="loadingStatus" style="margin-top:10px;">{{
-              loadingStatus ? "正在上传" : "确认发送"
-            }}</Button>
+            <Button
+              type="primary"
+              @click="upload"
+              :loading="loadingStatus"
+              style="margin-top: 10px"
+              >{{ loadingStatus ? "正在上传" : "确认发送" }}</Button
+            >
           </div>
         </div>
         <div v-if="showCopy || showDownload">
@@ -245,8 +253,10 @@
         </div>
       </div>
       <div class="footer">
-        Powered By <a href="http://blog.teahot.top/" target="_blank">maypu</a> - 
-        <a href="https://github.com/maypu/AirFile" target="_blank"><Icon type="logo-github"/>Github</a>
+        Powered By <a href="http://blog.teahot.top/" target="_blank">maypu</a> -
+        <a href="https://github.com/maypu/AirFile" target="_blank"
+          ><Icon type="logo-github" />Github</a
+        >
       </div>
     </div>
     <Modal
@@ -257,14 +267,9 @@
     >
       <Input type="password" password v-model="password" />
     </Modal>
-    <Modal v-model="isShowHistory" title="上传历史" footer-hide>
+    <Modal v-model="isShowHistory" title="上传历史" footer-hide width="1000" max-height="1000">
       <div class="show-about">
-        <table>
-          <thead></thead>
-          <tbody>
-            开发中……
-          </tbody>
-        </table>
+        <Table :columns="historyCol" :data="history"></Table>
       </div>
     </Modal>
     <Modal v-model="isShowAbout" title="开源项目鸣谢" footer-hide>
@@ -299,7 +304,8 @@ export default {
     return {
       productName: "AirFile",
       containHeight:
-        (window.innerHeight || document.documentElement.clientHeight) - 61 +
+        (window.innerHeight || document.documentElement.clientHeight) -
+        61 +
         "px",
       topHeight:
         ((window.innerHeight || document.documentElement.clientHeight) - 580) /
@@ -325,6 +331,38 @@ export default {
       limitTipContent: "",
       fileId: 0,
       isCopyed: false,
+      historyCol: [
+        {
+          type: "index",
+          width: 60,
+          align: "center"
+        },
+        {
+          title: "文件名",
+          key: "FileName",
+          width: 250
+        },
+        {
+          title: "文件码",
+          key: "RandomCode",
+          width: 100
+        },
+        {
+          title: "可下载次数",
+          key: "LimitTimes",
+          width: 120
+        },
+        {
+          title: "已下载次数",
+          key: "NumDownloads",
+          width: 120
+        },
+        {
+          title: "过期时间",
+          key: "ExpiryTime",
+        },
+      ],
+      history: [],
       isShowHistory: false,
       isShowAbout: false,
     };
@@ -338,12 +376,15 @@ export default {
   },
   computed: {
     nightTime() {
-      if (this.utils.CompareTime(new Date(),"23:00:00") > 0 || this.utils.CompareTime(new Date(),"07:00:00") < 0) {
+      if (
+        this.utils.CompareTime(new Date(), "23:00:00") > 0 ||
+        this.utils.CompareTime(new Date(), "07:00:00") < 0
+      ) {
         document.body.style.backgroundColor = "#22303f";
         return true;
       }
       return false;
-    }
+    },
   },
   created() {
     //取文件码参数
@@ -410,6 +451,7 @@ export default {
       if (res.Code == 200) {
         localStorage.setItem("uuid", res.Result);
         this.uuid = res.Result;
+        this.loadHistory();
       }
     });
     //获取cookie中的数据
@@ -503,6 +545,7 @@ export default {
             this.showCopyHandle(res.Result);
             //设置复制
             this.isCopyed = false;
+            this.loadHistory();
             //把下载次数和有效期存localStorage
             // localStorage.setItem("frequency", this.frequency);
             // localStorage.setItem("limithours", this.limithours);
@@ -604,6 +647,14 @@ export default {
       setTimeout((_) => {
         iframe.remove();
       }, 1000);
+    },
+    //获取上传历史
+    loadHistory() {
+      this.axios.post("history", { uuid: this.uuid }).then((res) => {
+        if (res.Code == 200) {
+          this.history = JSON.parse(res.Result);
+        }
+      });
     },
     frequencyChange(value) {
       if (value == null) {
