@@ -329,7 +329,6 @@ export default {
       showPwdModel: false,
       disableLimitTip: true,
       limitTipContent: "",
-      fileId: 0,
       isCopyed: false,
       historyCol: [
         {
@@ -604,7 +603,6 @@ export default {
           if (res.Code == 200) {
             if (res.Result) {
               let result = JSON.parse(res.Result);
-              this.fileId = result.file;
               if (result.password) {
                 //打开密码弹窗
                 this.password = null;
@@ -625,7 +623,7 @@ export default {
     },
     verifyPwd() {
       this.axios
-        .post("verifyPwd", { fileId: this.fileId, password: this.password })
+        .post("verifyPwd", { fileCode: this.verifiCode, password: this.password })
         .then((res) => {
           if (res) {
             if (res.Code == 200) {
@@ -642,7 +640,7 @@ export default {
       iframe.id = "downloadFrame";
       iframe.style.display = "none";
       iframe.src =
-        this.API_ROOT + "file/" + this.fileId + "?random=" + Math.random();
+        this.API_ROOT + "file/" + this.verifyPwd + "?random=" + Math.random();
       document.body.appendChild(iframe);
       setTimeout((_) => {
         iframe.remove();
