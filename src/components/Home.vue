@@ -372,6 +372,11 @@ export default {
       this.limitTipContent =
         (Math.round(newVal / 24) > 0 ? (newVal / 24).toFixed(2) : 0) + "天";
     },
+    isShowHistory(newVal, oldVal) {
+      if (newVal) {
+        this.loadHistory();
+      }
+    },
   },
   computed: {
     nightTime() {
@@ -450,7 +455,6 @@ export default {
       if (res.Code == 200) {
         localStorage.setItem("uuid", res.Result);
         this.uuid = res.Result;
-        this.loadHistory();
       }
     });
     //获取cookie中的数据
@@ -544,7 +548,6 @@ export default {
             this.showCopyHandle(res.Result);
             //设置复制
             this.isCopyed = false;
-            this.loadHistory();
             //把下载次数和有效期存localStorage
             // localStorage.setItem("frequency", this.frequency);
             // localStorage.setItem("limithours", this.limithours);
@@ -640,7 +643,7 @@ export default {
       iframe.id = "downloadFrame";
       iframe.style.display = "none";
       iframe.src =
-        this.API_ROOT + "file/" + this.verifyPwd + "?random=" + Math.random();
+        this.API_ROOT + "file/" + this.verifiCode + "?random=" + Math.random();
       document.body.appendChild(iframe);
       setTimeout((_) => {
         iframe.remove();
