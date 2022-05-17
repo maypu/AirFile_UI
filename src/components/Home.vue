@@ -387,6 +387,7 @@ export default {
         document.body.style.backgroundColor = "#22303f";
         return true;
       }
+      document.body.style.backgroundColor = "#fafafa";
       return false;
     },
   },
