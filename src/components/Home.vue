@@ -269,7 +269,7 @@
     </Modal>
     <Modal v-model="isShowHistory" title="上传历史" footer-hide width="1000" max-height="1000">
       <div class="show-about">
-        <Table :columns="historyCol" :data="history"></Table>
+        <Table :columns="historyCol" :data="history" :loading="historyLoading" :row-class-name="historyRowClass"></Table>
       </div>
     </Modal>
     <Modal v-model="isShowAbout" title="开源项目鸣谢" footer-hide>
@@ -363,6 +363,7 @@ export default {
       ],
       history: [],
       isShowHistory: false,
+      historyLoading: false,
       isShowAbout: false,
     };
   },
@@ -652,9 +653,17 @@ export default {
     },
     //获取上传历史
     loadHistory() {
+      this.historyLoading = true;
       this.axios.post("history", { uuid: this.uuid }).then((res) => {
+        this.historyLoading = false;
         if (res.Code == 200) {
-          this.history = JSON.parse(res.Result);
+          let history = JSON.parse(res.Result);
+          history.forEach((item) => {
+            item.CreatedAt = this.utils.formatDate(item.CreatedAt);
+            item.DeletedAt = this.utils.formatDate(item.DeletedAt);
+            item.ExpiryTime = this.utils.formatDate(item.ExpiryTime);
+          });
+          this.history = history;
         }
       });
     },
@@ -696,6 +705,12 @@ export default {
         this.file.size &&
         this.file.size / 1024 > this.uploadMaxSize
       );
+    },
+    historyRowClass(row, index) {
+      if (row.DeletedAt) {
+        return 'expiredHistory';
+      }
+      return "notExpiredHistory";
     },
   },
 };
@@ -809,5 +824,8 @@ export default {
   position: absolute;
   bottom: 5px;
   width: 98%;
+}
+.notExpiredHistory{
+  font-weight: bold;
 }
 </style>
