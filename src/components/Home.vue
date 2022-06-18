@@ -267,7 +267,7 @@
     >
       <Input type="password" password v-model="password" />
     </Modal>
-    <Modal v-model="isShowHistory" title="上传历史" footer-hide width="1000" max-height="1000">
+    <Modal v-model="isShowHistory" title="上传历史" footer-hide width="780" max-height="1000">
       <div class="show-about">
         <Table :columns="historyCol" :data="history" :loading="historyLoading" :row-class-name="historyRowClass"></Table>
       </div>
@@ -347,18 +347,14 @@ export default {
           width: 100
         },
         {
-          title: "可下载次数",
-          key: "LimitTimes",
-          width: 120
-        },
-        {
-          title: "已下载次数",
-          key: "NumDownloads",
-          width: 120
+          title: "下载次数",
+          key: "NumOfLimitTimes",
+          width: 100
         },
         {
           title: "过期时间",
           key: "ExpiryTime",
+          minWidth: 180
         },
       ],
       history: [],
@@ -659,6 +655,7 @@ export default {
         if (res.Code == 200) {
           let history = JSON.parse(res.Result);
           history.forEach((item) => {
+            item.NumOfLimitTimes = item.NumDownloads + '/' + item.LimitTimes;
             item.CreatedAt = this.utils.formatDate(item.CreatedAt);
             item.DeletedAt = this.utils.formatDate(item.DeletedAt);
             item.ExpiryTime = this.utils.formatDate(item.ExpiryTime);
@@ -825,7 +822,14 @@ export default {
   bottom: 5px;
   width: 98%;
 }
+</style>
+
+<style>
+.expiredHistory {
+  color: #868e96;
+  text-decoration: line-through;
+}
 .notExpiredHistory{
-  font-weight: bold;
+  font-size: initial;
 }
 </style>
