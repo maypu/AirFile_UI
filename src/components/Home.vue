@@ -333,7 +333,7 @@ export default {
       historyCol: [
         {
           type: "index",
-          width: 60,
+          width: 70,
           align: "center"
         },
         {
@@ -344,7 +344,7 @@ export default {
         {
           title: "文件码",
           key: "RandomCode",
-          width: 100
+          width: 110
         },
         {
           title: "下载次数",
