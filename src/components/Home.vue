@@ -6,17 +6,22 @@
         {{ productName }}
       </MenuItem>
       <div style="float: right">
+        <MenuItem name="2" @click.native="isShowHistory = true"
+              on-select="isShowHistory = true">
+            <Icon type="md-time" />
+            上传历史
+        </MenuItem>
         <Dropdown class="dropdown" placement="bottom-end">
           <Button type="primary">
             <Icon type="md-more" size="20" />
           </Button>
           <DropdownMenu slot="list">
-            <DropdownItem
+            <!-- <DropdownItem
               @click.native="isShowHistory = true"
               on-select="isShowHistory = true"
             >
               <Icon type="md-time" />上传历史</DropdownItem
-            >
+            > -->
             <DropdownItem
               @click.native="isShowAbout = true"
               on-select="isShowAbout = true"
