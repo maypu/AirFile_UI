@@ -6,10 +6,13 @@
         {{ productName }}
       </MenuItem>
       <div style="float: right">
-        <MenuItem name="2" @click.native="isShowHistory = true"
-              on-select="isShowHistory = true">
-            <Icon type="md-time" />
-            上传历史
+        <MenuItem
+          name="2"
+          @click.native="isShowHistory = true"
+          on-select="isShowHistory = true"
+        >
+          <Icon type="md-time" />
+          上传历史
         </MenuItem>
         <Dropdown class="dropdown" placement="bottom-end">
           <Button type="primary">
@@ -272,9 +275,20 @@
     >
       <Input type="password" password v-model="password" />
     </Modal>
-    <Modal v-model="isShowHistory" title="上传历史" footer-hide width="780" max-height="1000">
+    <Modal
+      v-model="isShowHistory"
+      title="上传历史"
+      footer-hide
+      width="780"
+      max-height="1000"
+    >
       <div class="show-about">
-        <Table :columns="historyCol" :data="history" :loading="historyLoading" :row-class-name="historyRowClass"></Table>
+        <Table
+          :columns="historyCol"
+          :data="history"
+          :loading="historyLoading"
+          :row-class-name="historyRowClass"
+        ></Table>
       </div>
     </Modal>
     <Modal v-model="isShowAbout" title="开源项目鸣谢" footer-hide>
@@ -339,27 +353,27 @@ export default {
         {
           type: "index",
           width: 70,
-          align: "center"
+          align: "center",
         },
         {
           title: "文件名",
           key: "FileName",
-          width: 250
+          width: 250,
         },
         {
           title: "文件码",
           key: "RandomCode",
-          width: 110
+          width: 110,
         },
         {
           title: "下载次数",
           key: "NumOfLimitTimes",
-          width: 100
+          width: 100,
         },
         {
           title: "过期时间",
           key: "ExpiryTime",
-          minWidth: 180
+          minWidth: 180,
         },
       ],
       history: [],
@@ -629,7 +643,10 @@ export default {
     },
     verifyPwd() {
       this.axios
-        .post("verifyPwd", { fileCode: this.verifiCode, password: this.password })
+        .post("verifyPwd", {
+          fileCode: this.verifiCode,
+          password: this.password,
+        })
         .then((res) => {
           if (res) {
             if (res.Code == 200) {
@@ -660,7 +677,7 @@ export default {
         if (res.Code == 200) {
           let history = JSON.parse(res.Result);
           history.forEach((item) => {
-            item.NumOfLimitTimes = item.NumDownloads + '/' + item.LimitTimes;
+            item.NumOfLimitTimes = item.NumDownloads + "/" + item.LimitTimes;
             item.CreatedAt = this.utils.formatDate(item.CreatedAt);
             item.DeletedAt = this.utils.formatDate(item.DeletedAt);
             item.ExpiryTime = this.utils.formatDate(item.ExpiryTime);
@@ -710,7 +727,7 @@ export default {
     },
     historyRowClass(row, index) {
       if (row.DeletedAt) {
-        return 'expiredHistory';
+        return "expiredHistory";
       }
       return "notExpiredHistory";
     },
@@ -834,7 +851,7 @@ export default {
   color: #868e96;
   text-decoration: line-through;
 }
-.notExpiredHistory{
+.notExpiredHistory {
   font-size: initial;
 }
 </style>
