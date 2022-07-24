@@ -389,6 +389,7 @@ export default {
         (Math.round(newVal / 24) > 0 ? (newVal / 24).toFixed(2) : 0) + "天";
     },
     isShowHistory(newVal, oldVal) {
+      this.history = [];
       if (newVal) {
         this.loadHistory();
       }
