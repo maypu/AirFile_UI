@@ -1,5 +1,6 @@
 import { Message } from 'view-design'
 import axios from 'axios'
+import utils from './utils'
 
 let errorMsgDuration = 4
 
@@ -17,6 +18,9 @@ instance.interceptors.request.use(config => {
 
 // 添加响应拦截器
 instance.interceptors.response.use((res) => {
+    if (!utils.interceptors.response) {
+        return res.data
+    }
     // 对响应数据做点什么
     if (res && res.data) {
         if (res.data.Code == 200) {

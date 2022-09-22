@@ -3,6 +3,10 @@ import { Message } from 'view-design';
 Vue.component('Message', Message);
 
 export default {
+    interceptors: {         //是否使用axios拦截器
+        request: true,
+        response: true
+    },
     MsgError: (msg) => {
         console.log(msg)
         console.log(this.$Message)

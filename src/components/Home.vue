@@ -19,12 +19,12 @@
             <Icon type="md-more" size="20" />
           </Button>
           <DropdownMenu slot="list">
-            <!-- <DropdownItem
-              @click.native="isShowHistory = true"
-              on-select="isShowHistory = true"
+            <DropdownItem
+              @click.native="isShowGitCommit = true"
+              on-select="isShowGitCommit = true"
             >
-              <Icon type="md-time" />上传历史</DropdownItem
-            > -->
+              <Icon type="md-time" />更新日志</DropdownItem
+            >
             <DropdownItem
               @click.native="isShowAbout = true"
               on-select="isShowAbout = true"
@@ -291,6 +291,17 @@
         ></Table>
       </div>
     </Modal>
+    <Modal v-model="isShowGitCommit" title="Git更新日志" footer-hide>
+      <div class="show-about">
+        <List>
+            <ListItem v-for="(item, index) in gitCommitList" :key="index">
+              <a :href="item.html_url" target="_balnk">
+                <ListItemMeta :avatar="item.committer.avatar_url" :title="item.commit.message" :description="item.commit.committer.name + ' · ' + utils.formatDate(item.commit.committer.date)" />
+              </a>
+              </ListItem>
+        </List>
+      </div>
+    </Modal>
     <Modal v-model="isShowAbout" title="开源项目鸣谢" footer-hide>
       <div class="show-about">
         <p>前端</p>
@@ -379,6 +390,8 @@ export default {
       history: [],
       isShowHistory: false,
       historyLoading: false,
+      isShowGitCommit: false,
+      gitCommitList: [],
       isShowAbout: false,
     };
   },
@@ -397,6 +410,15 @@ export default {
         }, 800);
       }
     },
+    isShowGitCommit(newVal, oldVal) {
+      if (newVal) {
+        this.getGitCommitList()
+      } else {
+        setTimeout(() => {
+          this.gitCommitList = [];
+        }, 800);
+      }
+    }
   },
   computed: {
     nightTime() {
@@ -688,6 +710,13 @@ export default {
           });
           this.history = history;
         }
+      });
+    },
+    getGitCommitList() {
+      this.utils.interceptors.response = false
+      this.axios.get("https://api.github.com/repos/maypu/AirFile/commits", {}).then((res) => {
+        this.gitCommitList = res;
+        this.utils.interceptors.response = true
       });
     },
     frequencyChange(value) {
