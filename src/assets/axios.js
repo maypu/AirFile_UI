@@ -42,7 +42,8 @@ instance.interceptors.response.use((res) => {
     if (error.message = "Network Error") {
         Message.error({
             content: '网络错误',
-            duration: errorMsgDuration
+            duration: 0,
+            closable: true
         })
     } else {
         Message.error({
