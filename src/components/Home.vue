@@ -41,7 +41,7 @@
       :style="{ height: containHeight }"
     >
       <div class="logo-area" :style="{ marginTop: topHeight }">
-        <img src="/static/images/logo.png" alt="logo.png" />
+        <img v-if="!file" src="/static/images/logo.png" alt="logo.png" />
         <p class="title">{{ productName }}</p>
         <p class="desc">文件快速分享</p>
       </div>
@@ -91,18 +91,23 @@
             </div>
           </div>
           <div v-else>
-            <div class="progress-num text-primary">
-              <span
-                v-if="progressNum != 0"
-                :class="{
-                  'text-success': progressNum > 98,
-                }"
-                >{{
-                  progressNum == 100 ? progressNum - 1 : progressNum
-                }}
-                %</span
-              >
-            </div>
+            <Row>
+              <Col span="20" style="text-align: left">待上传文件：</Col>
+              <Col span="4">
+                <div class="progress-num text-primary">
+                  <span
+                    v-if="progressNum != 0"
+                    :class="{
+                      'text-success': progressNum > 98,
+                    }"
+                    >{{
+                      progressNum == 100 ? progressNum - 1 : progressNum
+                    }}
+                    %</span
+                  >
+                </div>
+              </Col>
+            </Row>
             <!-- <Divider /> -->
             <Progress
               :percent="progressNum"
@@ -111,10 +116,15 @@
               class="process"
               status="active"
             />
-            <div v-if="file != null">
+            <div
+              v-if="file != null"
+              style="max-height: 200px; min-height: 50px"
+            >
               <Row>
-                <Col span="22">
-                  待上传文件：{{ file.name }}
+                <Col span="18">
+                  {{ file.name }}
+                </Col>
+                <Col span="4">
                   <span
                     :class="{
                       'text-success': !isOverMaxSize(),
@@ -126,8 +136,8 @@
                         ? (file.size / 1024000).toFixed(2)
                         : 0.01
                     }}Mb</span
-                  ></Col
-                >
+                  >
+                </Col>
                 <Col span="2">
                   <Icon
                     type="md-close"
@@ -294,11 +304,19 @@
     <Modal v-model="isShowGitCommit" title="Git更新日志" footer-hide>
       <div class="show-about">
         <List>
-            <ListItem v-for="(item, index) in gitCommitList" :key="index">
-              <a :href="item.html_url" target="_balnk">
-                <ListItemMeta :avatar="item.committer.avatar_url" :title="item.commit.message" :description="item.commit.committer.name + ' · ' + utils.formatDate(item.commit.committer.date)" />
-              </a>
-              </ListItem>
+          <ListItem v-for="(item, index) in gitCommitList" :key="index">
+            <a :href="item.html_url" target="_balnk">
+              <ListItemMeta
+                :avatar="item.committer.avatar_url"
+                :title="item.commit.message"
+                :description="
+                  item.commit.committer.name +
+                  ' · ' +
+                  utils.formatDate(item.commit.committer.date)
+                "
+              />
+            </a>
+          </ListItem>
         </List>
       </div>
     </Modal>
@@ -412,13 +430,13 @@ export default {
     },
     isShowGitCommit(newVal, oldVal) {
       if (newVal) {
-        this.getGitCommitList()
+        this.getGitCommitList();
       } else {
         setTimeout(() => {
           this.gitCommitList = [];
         }, 800);
       }
-    }
+    },
   },
   computed: {
     nightTime() {
@@ -713,11 +731,13 @@ export default {
       });
     },
     getGitCommitList() {
-      this.utils.interceptors.response = false
-      this.axios.get("https://api.github.com/repos/maypu/AirFile/commits", {}).then((res) => {
-        this.gitCommitList = res;
-        this.utils.interceptors.response = true
-      });
+      this.utils.interceptors.response = false;
+      this.axios
+        .get("https://api.github.com/repos/maypu/AirFile/commits", {})
+        .then((res) => {
+          this.gitCommitList = res;
+          this.utils.interceptors.response = true;
+        });
     },
     frequencyChange(value) {
       if (value == null) {
